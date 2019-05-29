@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.16-2 (2019/05/28)
+
+* GnuPG 2.2.16
+* Portapps 1.24.1
+
 ## 2.2.15-1 (2019/05/06)
 
 * Initial version based on GnuPG 2.2.15
