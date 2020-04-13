@@ -5,10 +5,11 @@ package main
 import (
 	"fmt"
 
-	. "github.com/portapps/portapps"
-	"github.com/portapps/portapps/pkg/dialog"
-	"github.com/portapps/portapps/pkg/utl"
-	"github.com/portapps/portapps/pkg/win"
+	"github.com/portapps/portapps/v2"
+	"github.com/portapps/portapps/v2/pkg/dialog"
+	"github.com/portapps/portapps/v2/pkg/log"
+	"github.com/portapps/portapps/v2/pkg/utl"
+	"github.com/portapps/portapps/v2/pkg/win"
 	"golang.org/x/sys/windows/registry"
 )
 
@@ -17,7 +18,7 @@ type config struct {
 }
 
 var (
-	app *App
+	app *portapps.App
 	cfg *config
 )
 
@@ -30,8 +31,8 @@ func init() {
 	}
 
 	// Init app
-	if app, err = NewWithCfg("gnupg-portable", "GnuPG", cfg); err != nil {
-		Log.Fatal().Err(err).Msg("Cannot initialize application. See log file for more info.")
+	if app, err = portapps.NewWithCfg("gnupg-portable", "GnuPG", cfg); err != nil {
+		log.Fatal().Err(err).Msg("Cannot initialize application. See log file for more info.")
 	}
 }
 
@@ -47,21 +48,21 @@ func main() {
 			"Would you like to set GNUPGHOME in your environment ?",
 			dialog.MsgBoxBtnYesNo|dialog.MsgBoxIconQuestion)
 		if err != nil {
-			Log.Fatal().Err(err).Msg("Cannot create dialog box")
+			log.Fatal().Err(err).Msg("Cannot create dialog box")
 		}
 	} else {
 		resp = dialog.MsgBoxSelectYes
 	}
 
 	if resp != dialog.MsgBoxSelectYes {
-		Log.Info().Msg("Skipping setting GNUPGHOME...")
+		log.Info().Msg("Skipping setting GNUPGHOME...")
 		return
 	}
 
-	Log.Info().Msgf("Set GNUPGHOME=%s", gnupgHome)
+	log.Info().Msgf("Set GNUPGHOME=%s", gnupgHome)
 	err = win.SetPermEnv(registry.CURRENT_USER, "GNUPGHOME", gnupgHome)
 	if err != nil {
-		Log.Fatal().Err(err).Msg("Cannot set GNUPGHOME")
+		log.Fatal().Err(err).Msg("Cannot set GNUPGHOME")
 	}
 	win.RefreshEnv()
 }
