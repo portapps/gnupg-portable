@@ -65,4 +65,6 @@ func main() {
 		log.Fatal().Err(err).Msg("Cannot set GNUPGHOME")
 	}
 	win.RefreshEnv()
+
+	defer app.Close()
 }
