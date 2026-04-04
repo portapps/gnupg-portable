@@ -1,9 +1,9 @@
 //go:generate go install -v github.com/josephspurrier/goversioninfo/cmd/goversioninfo
-//go:generate goversioninfo -icon=res/papp.ico -manifest=res/papp.manifest
 package main
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/portapps/portapps/v3"
 	"github.com/portapps/portapps/v3/pkg/log"
@@ -39,7 +39,7 @@ func main() {
 	var err error
 	var resp int
 
-	gnupgHome := utl.CreateFolder(utl.PathJoin(app.DataPath, ".gnupg"))
+	gnupgHome := utl.CreateFolder(filepath.Join(app.DataPath, ".gnupg"))
 
 	if !cfg.Silent {
 		resp, err = win.MsgBox(
