@@ -3,11 +3,11 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 
 	"github.com/portapps/portapps/v3"
 	"github.com/portapps/portapps/v3/pkg/log"
-	"github.com/portapps/portapps/v3/pkg/utl"
 	"github.com/portapps/portapps/v3/pkg/win"
 	"golang.org/x/sys/windows/registry"
 )
@@ -39,7 +39,10 @@ func main() {
 	var err error
 	var resp int
 
-	gnupgHome := utl.CreateFolder(filepath.Join(app.DataPath, ".gnupg"))
+	gnupgHome := filepath.Join(app.DataPath, ".gnupg")
+	if err := os.MkdirAll(gnupgHome, 0o755); err != nil {
+		log.Fatal().Err(err).Msg("Cannot create GnuPG home path")
+	}
 
 	if !cfg.Silent {
 		resp, err = win.MsgBox(
